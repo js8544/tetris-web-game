@@ -15,7 +15,7 @@
     {
       "id": "task-1",
       "title": "Bootstrap project and implement Tetris gameplay foundation",
-      "status": "in_progress",
+      "status": "completed",
       "acceptance_checks": [
         "React/Vite project scaffolded",
         "Board, tetromino logic, collision, lock, line clear, score, level are implemented"
@@ -24,7 +24,7 @@
     {
       "id": "task-2",
       "title": "Polish UI states and integrate Agentation",
-      "status": "pending",
+      "status": "completed",
       "acceptance_checks": [
         "Start, playing, paused, and game-over states are visually complete",
         "Agentation is mounted and app remains functional"
@@ -33,7 +33,7 @@
     {
       "id": "task-3",
       "title": "Verify with build and Playwright screenshots",
-      "status": "pending",
+      "status": "completed",
       "acceptance_checks": [
         "npm run build passes",
         "Playwright opens the app and captures UI screenshots"
@@ -42,7 +42,7 @@
     {
       "id": "task-4",
       "title": "Publish to GitHub and deploy to Railway",
-      "status": "pending",
+      "status": "in_progress",
       "acceptance_checks": [
         "GitHub repo exists and branch is pushed",
         "Railway deployment succeeds and returns a reachable URL"

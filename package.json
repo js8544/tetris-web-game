@@ -1,0 +1,28 @@
+{
+  "name": "tetris-web-game",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "agentation": "^3.0.2",
+    "express": "^4.21.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.4",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "playwright": "^1.59.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0"
+  }
+}
