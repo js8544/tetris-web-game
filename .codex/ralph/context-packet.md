@@ -1,6 +1,6 @@
 # Ralph Context Packet
 
-Iteration: 4
+Iteration: 5
 
 ## Objective
 Build, verify, GitHub-push, and Railway-deploy a polished Tetris web game with full UI/interaction and Agentation integration.
@@ -72,23 +72,6 @@ Build, verify, GitHub-push, and Railway-deploy a polished Tetris web game with f
 - [pending] task-4 Publish to GitHub and deploy to Railway
 
 ## Recent Progress
-Iteration 2
-Task: task-1 - Bootstrap project and implement Tetris gameplay foundation
-Status after iteration: in_progress
-Verify exit: 127
-Verify log: /workspace/tetris-game/.codex/ralph/verify-2.log
-Codex last message:
-阻塞仍然存在：当前 `/workspace/tetris-game` 是只读，无法执行 `task-1` 的任何落地代码修改。
-
-我刚刚实际复测了写入：
-- 命令：`mkdir -p src && echo test > src/.write_check`
-- 错误：`mkdir: cannot create directory ‘src’: Read-only file system`
-
-当前仓库状态：
-- 分支：`codex/tetris-delivery`
-- 仅有 Ralph 跟踪文件变更（`.codex/ralph/*`），项目代码尚未创建
-
-请先将该工作区切为可写（至少允许在 `/workspace/tetris-game` 创建/修改文件）。  
 一旦可写，我会立即继续本任务并完成这轮目标：Vite React+TS 脚手架 + Tetris 核心逻辑（棋盘/方块/碰撞/锁定/消行/分数/等级）并跑 `npm run build` 验证。
 
 Iteration 3
@@ -113,17 +96,34 @@ Codex last message:
 - Board / Tetromino / collision / lock / line clear / score / level
 - `npm run build` 验证结果反馈
 
+Iteration 4
+Task: task-1 - Bootstrap project and implement Tetris gameplay foundation
+Status after iteration: in_progress
+Verify exit: 127
+Verify log: /workspace/tetris-game/.codex/ralph/verify-4.log
+Codex last message:
+阻塞仍然存在，`task-1` 目前无法落地实现。
+
+我刚刚复核结果：
+- 工作区：`/workspace/tetris-game`
+- 分支：`codex/tetris-delivery`
+- Node/NPM：`v22.22.2` / `10.9.7`
+- 写入测试命令：`mkdir -p src && echo test > src/.write_check`
+- 实际错误：`mkdir: cannot create directory ‘src’: Read-only file system`
+
+由于当前文件系统只读，我无法创建 Vite React+TS 脚手架，也无法实现 Tetris 核心逻辑代码。请先将 `/workspace/tetris-game` 切换为可写；可写后我会立即继续本轮 `task-1` 并完成实现与构建验证。
+
 ## Working Tree
 M .codex/ralph/git-status.txt
  M .codex/ralph/progress.txt
 
 ## Diff Stat
 .codex/ralph/git-diff-stat.txt |  3 ---
- .codex/ralph/progress.txt      | 22 ++++++++++++++++++++++
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ .codex/ralph/progress.txt      | 17 +++++++++++++++++
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
 ## Latest Verification Summary
-task=task-1 verify exit=127; log=verify-3.log
+task=task-1 verify exit=127; log=verify-4.log
 
 ## Instructions For Codex
 - Work only on the current task above.
