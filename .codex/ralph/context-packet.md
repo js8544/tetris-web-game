@@ -1,6 +1,6 @@
 # Ralph Context Packet
 
-Iteration: 3
+Iteration: 4
 
 ## Objective
 Build, verify, GitHub-push, and Railway-deploy a polished Tetris web game with full UI/interaction and Agentation integration.
@@ -72,28 +72,6 @@ Build, verify, GitHub-push, and Railway-deploy a polished Tetris web game with f
 - [pending] task-4 Publish to GitHub and deploy to Railway
 
 ## Recent Progress
-- Recovery path: continue implementation directly in the repository via shell edits while preserving Ralph artifacts and verification discipline.
-Iteration 1
-Task: task-1 - Bootstrap project and implement Tetris gameplay foundation
-Status after iteration: in_progress
-Verify exit: 127
-Verify log: /workspace/tetris-game/.codex/ralph/verify-1.log
-Codex last message:
-阻塞点已确认：当前环境是只读文件系统，无法执行 `task-1` 所需的脚手架和代码落地。
-
-我实际尝试了写入操作：
-- `mkdir -p src && echo 'test' > src/test.txt`
-- 返回错误：`mkdir: cannot create directory ‘src’: Read-only file system`
-
-当前可确认状态：
-- 仓库为空（仅 `.git` 与 `.codex`）
-- 分支：`codex/tetris-delivery`
-- 远程：未配置
-- Node/NPM 可用：`node v22.22.2`，`npm 10.9.7`
-
-请先把工作区切到可写（至少 `/workspace/tetris-game` 可写）。  
-一旦可写，我会立即继续并在本轮完成 `task-1`：Vite React+TS 脚手架 + Tetris 核心（棋盘、方块、碰撞、锁定、消行、分数、等级）并跑通 `npm run build`。
-
 Iteration 2
 Task: task-1 - Bootstrap project and implement Tetris gameplay foundation
 Status after iteration: in_progress
@@ -113,17 +91,39 @@ Codex last message:
 请先将该工作区切为可写（至少允许在 `/workspace/tetris-game` 创建/修改文件）。  
 一旦可写，我会立即继续本任务并完成这轮目标：Vite React+TS 脚手架 + Tetris 核心逻辑（棋盘/方块/碰撞/锁定/消行/分数/等级）并跑 `npm run build` 验证。
 
+Iteration 3
+Task: task-1 - Bootstrap project and implement Tetris gameplay foundation
+Status after iteration: in_progress
+Verify exit: 127
+Verify log: /workspace/tetris-game/.codex/ralph/verify-3.log
+Codex last message:
+阻塞仍在，`task-1` 目前无法继续落地实现。
+
+我刚复核的结果：
+- 工作区路径：`/workspace/tetris-game`
+- 分支：`codex/tetris-delivery`
+- Node/NPM：`v22.22.2` / `10.9.7`
+- 写入测试失败：`mkdir -p src && echo test > src/.write_check`
+- 实际错误：`mkdir: cannot create directory ‘src’: Read-only file system`
+
+这意味着当前环境依然是只读，无法创建 Vite/React 项目文件，也无法实现俄罗斯方块核心逻辑代码。
+
+请先把 `/workspace/tetris-game` 切到可写。可写后我会立刻继续本轮 `task-1`，完成：
+- React + TypeScript + Vite 脚手架
+- Board / Tetromino / collision / lock / line clear / score / level
+- `npm run build` 验证结果反馈
+
 ## Working Tree
 M .codex/ralph/git-status.txt
  M .codex/ralph/progress.txt
 
 ## Diff Stat
 .codex/ralph/git-diff-stat.txt |  3 ---
- .codex/ralph/progress.txt      | 19 +++++++++++++++++++
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ .codex/ralph/progress.txt      | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
 ## Latest Verification Summary
-task=task-1 verify exit=127; log=verify-2.log
+task=task-1 verify exit=127; log=verify-3.log
 
 ## Instructions For Codex
 - Work only on the current task above.
