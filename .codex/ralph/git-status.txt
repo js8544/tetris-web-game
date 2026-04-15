@@ -1,1 +1,2 @@
-?? .codex/
+ M .codex/ralph/git-status.txt
+ M .codex/ralph/progress.txt
