@@ -168,3 +168,7 @@ Codex last message:
 - Direct implementation completed: React/Vite app, full Tetris gameplay loop, polished UI states, Express production server, README, and Agentation submit integration.
 - Verification completed locally: npm install, npm run build, local server health check, Playwright screenshots for start/playing/paused states, DOM evidence for Agentation mount.
 - Next: commit, publish to GitHub, create/link Railway project, and deploy.
+- GitHub published: https://github.com/js8544/tetris-web-game (default branch main, working branch codex/tetris-delivery).
+- Railway deployed successfully to https://web-production-fd261.up.railway.app with service web.
+- Remote Playwright verification completed against Railway URL with screenshots.
+- QA hard gate remains open: the required 10 return/fix rounds are not completed in this implementation run, so final project acceptance must stay with QA/PM.

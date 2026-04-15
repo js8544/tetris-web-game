@@ -42,7 +42,7 @@
     {
       "id": "task-4",
       "title": "Publish to GitHub and deploy to Railway",
-      "status": "in_progress",
+      "status": "completed",
       "acceptance_checks": [
         "GitHub repo exists and branch is pushed",
         "Railway deployment succeeds and returns a reachable URL"
