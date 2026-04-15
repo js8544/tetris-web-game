@@ -1,12 +1,17 @@
-`task-1` 目前仍被环境阻塞，无法进行代码实现。
+`task-1` 仍然无法推进到实现阶段，环境依旧是只读。
 
-我刚复核到的事实：
+我本轮实际复核结果：
 - 工作区：`/workspace/tetris-game`
 - 分支：`codex/tetris-delivery`
 - Node/NPM：`v22.22.2` / `10.9.7`
-- 写入测试失败：`mkdir -p src && echo test > src/.write_check`
-- 具体错误：`mkdir: cannot create directory ‘src’: Read-only file system`
-- 当前验证脚本日志 `/.codex/ralph/verify-6.log` 也未进入真实构建验证阶段
+- 写入测试：`mkdir -p src && echo test > src/.write_check`
+- 失败错误：`mkdir: cannot create directory ‘src’: Read-only file system`
 
-在只读文件系统下，我无法完成本任务验收项（Vite React+TS 脚手架 + Tetris 核心逻辑 + `npm run build`）。  
-请先将 `/workspace/tetris-game` 切换为可写；可写后我会立即继续 `task-1` 并给出实现与构建结果。
+另外我定位到一个额外阻塞点：当前验收脚本内容本身无效，`verify-current-task.sh` 第 3-4 行是纯文本，不是可执行命令：
+- [.codex/ralph/verify-current-task.sh](/workspace/tetris-game/.codex/ralph/verify-current-task.sh):3
+- [.codex/ralph/verify-current-task.sh](/workspace/tetris-game/.codex/ralph/verify-current-task.sh):4
+
+请先将 `/workspace/tetris-game` 切换为可写。可写后我会立即继续 `task-1`，直接完成：
+1. React + TypeScript + Vite 脚手架  
+2. Tetris 核心逻辑（board/tetromino/collision/lock/line clear/score/level）  
+3. 修复验证脚本并执行 `npm run build` 验收  
