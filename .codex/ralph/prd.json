@@ -1,0 +1,52 @@
+{
+  "objective": "Build, verify, GitHub-push, and Railway-deploy a polished Tetris web game with full UI/interaction and Agentation integration.",
+  "acceptance_checks": [
+    "Build passes with npm run build",
+    "Local app runs and core Tetris loop is playable",
+    "UI includes hero/start, board, sidebar, next preview, score, level, controls, pause, game over, restart",
+    "Controls include move, rotate, soft drop, hard drop, pause/resume, restart",
+    "Agentation is mounted with Consen webhook URL",
+    "Git repo initialized with checkpoint commits",
+    "GitHub remote exists and code is pushed",
+    "Railway deployment succeeds and reachable URL is verified",
+    "Playwright screenshots are produced against the running app"
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Bootstrap project and implement Tetris gameplay foundation",
+      "status": "in_progress",
+      "acceptance_checks": [
+        "React/Vite project scaffolded",
+        "Board, tetromino logic, collision, lock, line clear, score, level are implemented"
+      ]
+    },
+    {
+      "id": "task-2",
+      "title": "Polish UI states and integrate Agentation",
+      "status": "pending",
+      "acceptance_checks": [
+        "Start, playing, paused, and game-over states are visually complete",
+        "Agentation is mounted and app remains functional"
+      ]
+    },
+    {
+      "id": "task-3",
+      "title": "Verify with build and Playwright screenshots",
+      "status": "pending",
+      "acceptance_checks": [
+        "npm run build passes",
+        "Playwright opens the app and captures UI screenshots"
+      ]
+    },
+    {
+      "id": "task-4",
+      "title": "Publish to GitHub and deploy to Railway",
+      "status": "pending",
+      "acceptance_checks": [
+        "GitHub repo exists and branch is pushed",
+        "Railway deployment succeeds and returns a reachable URL"
+      ]
+    }
+  ]
+}

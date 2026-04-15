@@ -1,0 +1,14 @@
+阻塞点已确认：当前环境是只读文件系统，无法执行 `task-1` 所需的脚手架和代码落地。
+
+我实际尝试了写入操作：
+- `mkdir -p src && echo 'test' > src/test.txt`
+- 返回错误：`mkdir: cannot create directory ‘src’: Read-only file system`
+
+当前可确认状态：
+- 仓库为空（仅 `.git` 与 `.codex`）
+- 分支：`codex/tetris-delivery`
+- 远程：未配置
+- Node/NPM 可用：`node v22.22.2`，`npm 10.9.7`
+
+请先把工作区切到可写（至少 `/workspace/tetris-game` 可写）。  
+一旦可写，我会立即继续并在本轮完成 `task-1`：Vite React+TS 脚手架 + Tetris 核心（棋盘、方块、碰撞、锁定、消行、分数、等级）并跑通 `npm run build`。
