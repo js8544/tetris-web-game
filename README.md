@@ -30,4 +30,4 @@ npm start
 
 - `VITE_AGENTATION_WEBHOOK_URL`
 
-当前实现已经移除前端手写 webhook 提交与硬编码 Consen ID，改为把 `webhookUrl` 直接交给官方 `Agentation` 组件处理。页面里的状态文案只提示“已触发官方提交”，不再伪造 webhook 成功/失败结果。
+当前实现保留 `webhookUrl=https://api.consen.app/webhooks/agentation`，但会在浏览器端把 Agentation 官方事件 payload 规范化成 Consen `/webhooks/agentation` 兼容格式：顶层 `timestamp` 强制转成字符串，`submit` 事件使用顶层 `workspace_id / project_id / task_id / chat_id / site_id`，并把 `annotations` 简化为 `{ id, comment }` 数组。

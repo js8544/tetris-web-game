@@ -1,4 +1,10 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  buildConsenAgentationPayload,
+  createConsenAgentationContext,
+  extractRequestBodyText,
+  parseRequestJson,
+} from './lib/agentation-consen';
 import { BOARD_HEIGHT, BOARD_WIDTH } from './game/constants';
 import {
   advanceGame,
@@ -27,12 +33,64 @@ function readHighScore(): number {
 }
 
 function App() {
+  const consenAgentationContext = useMemo(
+    () => createConsenAgentationContext(window.location.href),
+    [],
+  );
+
   const [game, setGame] = useState<GameState>(() => createInitialGame(readHighScore()));
   const [agentationStatus, setAgentationStatus] = useState<'idle' | 'ready' | 'submitting'>('idle');
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, String(game.highScore));
   }, [game.highScore]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const originalFetch = window.fetch.bind(window);
+
+    const wrappedFetch: typeof window.fetch = async (input, init) => {
+      const requestUrl =
+        typeof input === 'string'
+          ? input
+          : input instanceof URL
+            ? input.toString()
+            : input.url;
+
+      if (requestUrl !== webhookUrl) {
+        return originalFetch(input, init);
+      }
+
+      const bodyText = await extractRequestBodyText(input, init);
+      const parsedPayload = parseRequestJson(bodyText);
+      const consenPayload = buildConsenAgentationPayload(
+        parsedPayload,
+        consenAgentationContext,
+        window.location.href,
+      );
+
+      const headers = new Headers(
+        init?.headers ?? (input instanceof Request ? input.headers : undefined),
+      );
+      headers.set('Content-Type', 'application/json');
+
+      return originalFetch(requestUrl, {
+        ...init,
+        method: 'POST',
+        headers,
+        body: JSON.stringify(consenPayload),
+      });
+    };
+
+    window.fetch = wrappedFetch;
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [consenAgentationContext]);
 
   const startGame = useCallback(() => {
     setGame((previous) => createInitialGame(previous.highScore, 'playing'));
