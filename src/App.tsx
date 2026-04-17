@@ -1,4 +1,3 @@
-import type { Annotation } from 'agentation';
 import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { BOARD_HEIGHT, BOARD_WIDTH } from './game/constants';
 import {
@@ -14,10 +13,6 @@ import {
 import type { GameState } from './game/types';
 
 const STORAGE_KEY = 'tetris-high-score';
-const projectId = import.meta.env.VITE_CONSEN_PROJECT_ID ?? 'prj_01kp7njnewfm6bbzdaew554ydd';
-const taskId = import.meta.env.VITE_CONSEN_TASK_ID ?? 'tsk_01kp7nmabtfyb93dshv7zwahmx';
-const chatId = import.meta.env.VITE_CONSEN_CHAT_ID ?? 'chat_01kp7nentvedfr6q52d1p00f1h';
-const workspaceId = import.meta.env.VITE_CONSEN_WORKSPACE_ID ?? 'ws_01kf0b8vzse7rb8tf8s2r1sgxj';
 const webhookUrl = import.meta.env.VITE_AGENTATION_WEBHOOK_URL ?? 'https://api.consen.app/webhooks/agentation';
 
 const AgentationOverlay = lazy(async () => {
@@ -33,7 +28,7 @@ function readHighScore(): number {
 
 function App() {
   const [game, setGame] = useState<GameState>(() => createInitialGame(readHighScore()));
-  const [agentationStatus, setAgentationStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [agentationStatus, setAgentationStatus] = useState<'idle' | 'ready' | 'submitting'>('idle');
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, String(game.highScore));
@@ -124,39 +119,9 @@ function App() {
   const renderBoard = useMemo(() => composeRenderBoard(game.board, game.current), [game.board, game.current]);
   const previewMatrix = useMemo(() => getPreviewMatrix(game.nextType), [game.nextType]);
 
-  const handleSubmitFeedback = useCallback(async (output: string, annotations: Annotation[]) => {
-    setAgentationStatus('sending');
-    try {
-      const payload = {
-        event: 'submit',
-        timestamp: Date.now(),
-        url: window.location.href,
-        output,
-        annotations,
-        project_id: projectId,
-        task_id: taskId,
-        chat_id: chatId,
-        workspace_id: workspaceId,
-      };
-
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Webhook returned ${response.status}`);
-      }
-      setAgentationStatus('sent');
-      window.setTimeout(() => setAgentationStatus('idle'), 2800);
-    } catch (error) {
-      console.error('Agentation submit failed', error);
-      setAgentationStatus('error');
-    }
+  const handleSubmitFeedback = useCallback(() => {
+    setAgentationStatus('submitting');
+    window.setTimeout(() => setAgentationStatus('idle'), 2500);
   }, []);
 
   const statusLabel = {
@@ -195,7 +160,7 @@ function App() {
             <div className="status-pills">
               <span className={`pill pill--${game.status}`}>{statusLabel}</span>
               <span className="pill pill--subtle">桌面键盘优先</span>
-              <span className="pill pill--subtle">Agentation 已接入</span>
+              <span className="pill pill--subtle">Agentation 官方 webhook</span>
             </div>
           </section>
 
@@ -321,13 +286,12 @@ function App() {
                 <span className="panel-tag">Agentation</span>
               </div>
               <p>
-                右下角可直接标注界面并提交反馈，已绑定 Consen Agentation webhook。
+                右下角可直接标注界面并提交反馈；发送动作由官方 Agentation 组件直接投递到配置的 webhook。
               </p>
-              <div className={`feedback-status feedback-status--${agentationStatus}`}> 
-                {agentationStatus === 'idle' && '等待反馈提交'}
-                {agentationStatus === 'sending' && '正在发送反馈…'}
-                {agentationStatus === 'sent' && '反馈已提交到 Consen'}
-                {agentationStatus === 'error' && '反馈发送失败，请重试'}
+              <div className={`feedback-status feedback-status--${agentationStatus}`}>
+                {agentationStatus === 'idle' && '等待反馈操作'}
+                {agentationStatus === 'ready' && '标注已记录，发送将走官方 webhook'}
+                {agentationStatus === 'submitting' && '已触发官方提交，请留意 Agentation 自身发送结果'}
               </div>
             </section>
           </aside>
@@ -336,8 +300,11 @@ function App() {
 
       <Suspense fallback={null}>
         <AgentationOverlay
+          webhookUrl={webhookUrl}
           onSubmit={handleSubmitFeedback}
-          onAnnotationAdd={() => setAgentationStatus('idle')}
+          onAnnotationAdd={() => setAgentationStatus('ready')}
+          onAnnotationDelete={() => setAgentationStatus('idle')}
+          onAnnotationsClear={() => setAgentationStatus('idle')}
           copyToClipboard
         />
       </Suspense>
