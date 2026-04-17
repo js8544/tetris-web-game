@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import {
   buildConsenAgentationPayload,
   createConsenAgentationContext,
@@ -39,7 +39,6 @@ function App() {
   );
 
   const [game, setGame] = useState<GameState>(() => createInitialGame(readHighScore()));
-  const [agentationStatus, setAgentationStatus] = useState<'idle' | 'ready' | 'submitting'>('idle');
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, String(game.highScore));
@@ -92,15 +91,15 @@ function App() {
     };
   }, [consenAgentationContext]);
 
-  const startGame = useCallback(() => {
+  const startGame = () => {
     setGame((previous) => createInitialGame(previous.highScore, 'playing'));
-  }, []);
+  };
 
-  const restartGame = useCallback(() => {
+  const restartGame = () => {
     setGame((previous) => createInitialGame(previous.highScore, 'playing'));
-  }, []);
+  };
 
-  const togglePause = useCallback(() => {
+  const togglePause = () => {
     setGame((previous) => {
       if (previous.status === 'playing') {
         return { ...previous, status: 'paused' };
@@ -110,7 +109,7 @@ function App() {
       }
       return previous;
     });
-  }, []);
+  };
 
   useEffect(() => {
     if (game.status !== 'playing') {
@@ -172,15 +171,10 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [game.status, restartGame, startGame, togglePause]);
+  }, [game.status]);
 
   const renderBoard = useMemo(() => composeRenderBoard(game.board, game.current), [game.board, game.current]);
   const previewMatrix = useMemo(() => getPreviewMatrix(game.nextType), [game.nextType]);
-
-  const handleSubmitFeedback = useCallback(() => {
-    setAgentationStatus('submitting');
-    window.setTimeout(() => setAgentationStatus('idle'), 2500);
-  }, []);
 
   const statusLabel = {
     idle: '等待开始',
@@ -202,7 +196,7 @@ function App() {
             <p className="eyebrow">Railway Delivery Build</p>
             <h1>霓虹俄罗斯方块</h1>
             <p className="hero-copy">
-              完整 UI、键盘操控、暂停/继续、等级加速、下一块预览、游戏结束态与 Agentation 反馈入口都已内置。
+              完整 UI、键盘操控、暂停/继续、等级加速、下一块预览与游戏结束态都已内置，打开页面即可直接开玩。
             </p>
             <div className="hero-actions">
               <button className="primary-btn" onClick={game.status === 'paused' ? togglePause : startGame}>
@@ -218,7 +212,6 @@ function App() {
             <div className="status-pills">
               <span className={`pill pill--${game.status}`}>{statusLabel}</span>
               <span className="pill pill--subtle">桌面键盘优先</span>
-              <span className="pill pill--subtle">Agentation 官方 webhook</span>
             </div>
           </section>
 
@@ -337,21 +330,6 @@ function App() {
                 <li><kbd>R</kbd> 立即重开</li>
               </ul>
             </section>
-
-            <section className="panel feedback-panel">
-              <div className="panel-header">
-                <h3>反馈链路</h3>
-                <span className="panel-tag">Agentation</span>
-              </div>
-              <p>
-                右下角可直接标注界面并提交反馈；发送动作由官方 Agentation 组件直接投递到配置的 webhook。
-              </p>
-              <div className={`feedback-status feedback-status--${agentationStatus}`}>
-                {agentationStatus === 'idle' && '等待反馈操作'}
-                {agentationStatus === 'ready' && '标注已记录，发送将走官方 webhook'}
-                {agentationStatus === 'submitting' && '已触发官方提交，请留意 Agentation 自身发送结果'}
-              </div>
-            </section>
           </aside>
         </main>
       </div>
@@ -359,10 +337,6 @@ function App() {
       <Suspense fallback={null}>
         <AgentationOverlay
           webhookUrl={webhookUrl}
-          onSubmit={handleSubmitFeedback}
-          onAnnotationAdd={() => setAgentationStatus('ready')}
-          onAnnotationDelete={() => setAgentationStatus('idle')}
-          onAnnotationsClear={() => setAgentationStatus('idle')}
           copyToClipboard
         />
       </Suspense>
